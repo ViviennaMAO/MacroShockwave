@@ -57,7 +57,7 @@ export function HomePage() {
   }
 
   return (
-    <div className="space-y-6 pb-20">
+    <div className="space-y-4 pb-20">
       {modalData && (
         <BetModal
           isOpen={isModalOpen}
@@ -68,22 +68,22 @@ export function HomePage() {
           onConfirm={handleConfirmBet}
         />
       )}
-      {/* Mobile-First Dashboard Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 py-8">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-3 rounded-full bg-success animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-            <span className="text-xs font-black text-success tracking-widest uppercase">● LIVE</span>
+      {/* Mobile-First Dashboard Header - Extra Compact */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 py-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-2 rounded-full bg-success animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+            <span className="text-[10px] font-black text-success tracking-widest uppercase">● LIVE</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white uppercase leading-none">
+          <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white uppercase leading-none">
             {liveEvent.name}
           </h1>
         </div>
 
-        {/* Digital Clock Styled Countdown */}
-        <div className="bg-danger/10 border border-danger/20 rounded-xl px-4 py-2 flex items-center gap-4 self-start md:self-auto shadow-lg shadow-danger/5">
-          <span className="text-danger text-xl">⏰</span>
-          <div className="font-mono text-2xl md:text-3xl font-black text-danger tracking-tighter drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]">
+        {/* Digital Clock Styled Countdown - Even Smaller */}
+        <div className="bg-danger/10 border border-danger/20 rounded-lg px-3 py-1.5 flex items-center gap-3 self-start md:self-auto shadow-lg shadow-danger/5">
+          <span className="text-danger text-lg">⏰</span>
+          <div className="font-mono text-xl md:text-2xl font-black text-danger tracking-tighter drop-shadow-[0_0_5px_rgba(239,68,68,0.5)]">
             <Countdown
               targetDate={new Date(new Date(liveEvent.releaseTime).getTime() - 5 * 60 * 1000)}
               variant="digital"
