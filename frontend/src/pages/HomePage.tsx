@@ -180,11 +180,20 @@ function PlayStyleCard({ pool, onSelectOption }: { pool: any, onSelectOption: (o
             key={opt.id}
             whileTap={{ scale: 0.98 }}
             onClick={() => onSelectOption(opt)}
-            className="p-4 rounded-xl bg-white/5 border border-white/5 hover:border-white/20 hover:bg-white/[0.08] cursor-pointer transition-all flex items-center justify-between"
+            className={cn(
+              "p-4 rounded-xl bg-white/5 border border-white/5 hover:border-white/20 hover:bg-white/[0.08] cursor-pointer transition-all flex items-center justify-between",
+              isVolatility && "flex-col text-center justify-center py-6"
+            )}
           >
             <div className="flex flex-col">
               <span className="text-sm font-black text-white uppercase tracking-wider">{opt.name}</span>
-              <span className="text-[10px] text-gray-500 font-bold">Pool Share: ---</span>
+              {isVolatility ? (
+                <span className="text-[10px] text-gray-500 font-bold mt-1">
+                  {opt.name === 'CALM' ? '< $200 Calm' : '> $1000 Move'}
+                </span>
+              ) : (
+                <span className="text-[10px] text-gray-500 font-bold">Pool Share: ---</span>
+              )}
             </div>
             {isJackpot && (
               <span className="text-blue-400 font-black">
@@ -193,7 +202,7 @@ function PlayStyleCard({ pool, onSelectOption }: { pool: any, onSelectOption: (o
                     opt.name.includes('96k') ? '10x' : '5x'}
               </span>
             )}
-            {!isJackpot && (
+            {!isJackpot && !isVolatility && (
               <span className="text-gray-600 transition-transform group-hover:translate-x-1">→</span>
             )}
           </motion.div>
