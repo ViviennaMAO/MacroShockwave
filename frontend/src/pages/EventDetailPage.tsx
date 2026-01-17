@@ -36,7 +36,7 @@ export function EventDetailPage() {
     try {
       setLoading(true);
       setError(null);
-      const response = (await eventsApi.getEventDetail(id!)) as ApiResponse<Event>;
+      const response = (await eventsApi.getEventDetail(id!)) as unknown as ApiResponse<Event>;
       setEvent(response.data);
     } catch (err: any) {
       setError(err.message || '加载失败');
@@ -71,9 +71,9 @@ export function EventDetailPage() {
   const isBetting = event.status === 'BETTING';
   const statusVariant =
     isBetting ? 'success' :
-    event.status === 'LOCKED' ? 'warning' :
-    event.status === 'SETTLED' ? 'default' :
-    'primary';
+      event.status === 'LOCKED' ? 'warning' :
+        event.status === 'SETTLED' ? 'default' :
+          'primary';
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">

@@ -12,7 +12,6 @@ import {
   formatPercent,
   shortenAddress,
   getOrderStatusName,
-  getOrderStatusColor,
   formatDateTime,
 } from '../lib/utils';
 
@@ -35,7 +34,7 @@ export function ProfilePage() {
     try {
       setLoading(true);
       setError(null);
-      const response = (await usersApi.getStats()) as ApiResponse<UserStats>;
+      const response = (await usersApi.getStats()) as unknown as ApiResponse<UserStats>;
       setStats(response.data);
     } catch (err: any) {
       setError(err.message || '加载失败');
@@ -208,8 +207,8 @@ export function ProfilePage() {
                   <Badge
                     variant={
                       order.status === 'WON' ? 'success' :
-                      order.status === 'LOST' ? 'danger' :
-                      'default'
+                        order.status === 'LOST' ? 'danger' :
+                          'default'
                     }
                   >
                     {getOrderStatusName(order.status)}
@@ -223,9 +222,9 @@ export function ProfilePage() {
                   <span className="text-gray-400">
                     下注: {formatAmount(order.amount)}
                   </span>
-                  {order.winnings > 0 && (
+                  {order.actualWinnings > 0 && (
                     <span className="text-success">
-                      收益: {formatAmount(order.winnings)}
+                      收益: {formatAmount(order.actualWinnings)}
                     </span>
                   )}
                 </div>

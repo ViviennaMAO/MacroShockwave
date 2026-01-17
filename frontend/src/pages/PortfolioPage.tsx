@@ -36,7 +36,7 @@ export function PortfolioPage() {
     try {
       setLoading(true);
       setError(null);
-      const response = (await usersApi.getPortfolio()) as ApiResponse<Portfolio>;
+      const response = (await usersApi.getPortfolio()) as unknown as ApiResponse<Portfolio>;
       setPortfolio(response.data);
     } catch (err: any) {
       setError(err.message || '加载失败');

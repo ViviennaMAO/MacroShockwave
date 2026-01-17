@@ -21,7 +21,7 @@ export function HomePage() {
     try {
       setLoading(true);
       setError(null);
-      const response = (await eventsApi.getEvents()) as ApiResponse<Event[]>;
+      const response = (await eventsApi.getEvents()) as unknown as ApiResponse<Event[]>;
       setEvents(response.data);
     } catch (err: any) {
       setError(err.message || '加载失败');

@@ -83,6 +83,9 @@ export function BettingPanel({ event, pool, onBetPlaced }: BettingPanelProps) {
       }
 
       // 3. 确认订单
+      if (!txResult.txHash) {
+        throw new Error('未获取到交易哈希');
+      }
       await betsApi.confirmBet(orderId, txResult.txHash);
 
       // 4. 刷新页面
@@ -217,8 +220,8 @@ export function BettingPanel({ event, pool, onBetPlaced }: BettingPanelProps) {
               {!isConnected
                 ? '请先连接钱包'
                 : loading
-                ? '下注中...'
-                : '确认下注'}
+                  ? '下注中...'
+                  : '确认下注'}
             </Button>
 
             <div className="text-xs text-gray-500 text-center">

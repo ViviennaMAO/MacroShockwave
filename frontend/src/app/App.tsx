@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from '@/components/layout/Layout';
-import Home from '@/pages/Home';
-import EventDetail from '@/pages/EventDetail';
-import Portfolio from '@/pages/Portfolio';
-import Profile from '@/pages/Profile';
+import { Layout } from '@/components/Layout';
+import { HomePage as Home } from '@/pages/HomePage';
+import { EventDetailPage as EventDetail } from '@/pages/EventDetailPage';
+import { PortfolioPage as Portfolio } from '@/pages/PortfolioPage';
+import { ProfilePage as Profile } from '@/pages/ProfilePage';
 
 function App() {
   return (

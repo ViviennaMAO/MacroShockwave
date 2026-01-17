@@ -25,7 +25,7 @@ export function LeaderboardPage() {
       const response = (await usersApi.getLeaderboard({
         type,
         limit: 100,
-      })) as ApiResponse<LeaderboardEntry[]>;
+      })) as unknown as ApiResponse<LeaderboardEntry[]>;
       setLeaderboard(response.data);
     } catch (err: any) {
       setError(err.message || '加载失败');
