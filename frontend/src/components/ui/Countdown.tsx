@@ -29,10 +29,12 @@ export function Countdown({ targetDate, onExpire, variant = 'default' }: Countdo
   }
 
   if (variant === 'digital') {
-    const totalMinutes = countdown.days * 24 * 60 + countdown.hours * 60 + countdown.minutes;
     return (
       <span className="font-mono">
-        {totalMinutes.toString().padStart(2, '0')}:{countdown.seconds.toString().padStart(2, '0')}
+        {countdown.days.toString().padStart(2, '0')}:
+        {countdown.hours.toString().padStart(2, '0')}:
+        {countdown.minutes.toString().padStart(2, '0')}:
+        {countdown.seconds.toString().padStart(2, '0')}
       </span>
     );
   }
