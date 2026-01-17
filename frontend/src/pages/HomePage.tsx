@@ -119,19 +119,19 @@ export function HomePage() {
         ))}
       </div>
 
-      {/* Secondary Stats (Mobile Grid) */}
-      <div className="grid grid-cols-1 gap-4 md:hidden pt-8">
-        <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-          <div className="text-sm text-gray-400 mb-1">进行中的事件</div>
-          <div className="text-4xl font-black text-white">1</div>
+      {/* Secondary Stats (Horizontal Grid) */}
+      <div className="grid grid-cols-3 gap-3 pt-4">
+        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+          <div className="text-[10px] text-gray-500 mb-1 font-bold">进行中</div>
+          <div className="text-xl font-black text-white">1</div>
         </div>
-        <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-          <div className="text-sm text-gray-400 mb-1">总奖金池</div>
-          <div className="text-4xl font-black text-white">$12,500</div>
+        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+          <div className="text-[10px] text-gray-500 mb-1 font-bold">总奖金</div>
+          <div className="text-xl font-black text-white leading-tight">$12.5k</div>
         </div>
-        <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-          <div className="text-sm text-gray-400 mb-1">待发布事件</div>
-          <div className="text-4xl font-black text-white">1</div>
+        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+          <div className="text-[10px] text-gray-500 mb-1 font-bold">待发布</div>
+          <div className="text-xl font-black text-white">1</div>
         </div>
       </div>
     </div>
