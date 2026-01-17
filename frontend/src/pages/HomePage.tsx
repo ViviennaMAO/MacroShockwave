@@ -93,20 +93,18 @@ export function HomePage() {
       </div>
 
       {/* Quick Stats Bar */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-white/10 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-md">
-        <div className="p-4 border-b md:border-b-0 md:border-r border-white/10 text-center md:text-left">
-          <div className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">EXPECTED</div>
-          <div className="text-xl font-bold text-white">{liveEvent.consensusValue}%</div>
+      <div className="grid grid-cols-3 gap-0 border border-white/10 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-md">
+        <div className="p-3 border-r border-white/10 text-center">
+          <div className="text-[9px] uppercase tracking-tight text-gray-500 font-bold mb-1">EXPECTED</div>
+          <div className="text-sm md:text-xl font-black text-white">{liveEvent.consensusValue}%</div>
         </div>
-        <div className="p-4 border-b md:border-b-0 md:border-r border-white/10 text-center md:text-left">
-          <div className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">BASE PRICE (BTC)</div>
-          <div className="text-xl font-bold text-white">${liveEvent.basePrice?.toLocaleString()}</div>
+        <div className="p-3 border-r border-white/10 text-center">
+          <div className="text-[9px] uppercase tracking-tight text-gray-500 font-bold mb-1">BASE BTC</div>
+          <div className="text-sm md:text-xl font-black text-white">${liveEvent.basePrice?.toLocaleString()}</div>
         </div>
-        <div className="p-4 text-center md:text-left">
-          <div className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-1">MARKET STATUS</div>
-          <div className="flex justify-center md:justify-start">
-            <Badge variant="success" className="font-bold py-1 px-3">BETTING</Badge>
-          </div>
+        <div className="p-3 text-center flex flex-col items-center justify-center">
+          <div className="text-[9px] uppercase tracking-tight text-gray-500 font-bold mb-1">STATUS</div>
+          <Badge variant="success" className="font-bold py-0.5 px-2 text-[10px]">LIVE</Badge>
         </div>
       </div>
 
