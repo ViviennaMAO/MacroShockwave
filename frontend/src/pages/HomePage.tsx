@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { eventsApi } from '../lib/api';
 import { Event, ApiResponse, GameMode as GameModeType } from '../lib/types';
 import { LoadingPage } from '../components/ui/Loading';
@@ -7,13 +6,18 @@ import { Empty } from '../components/ui/Empty';
 import { motion } from 'framer-motion';
 import { Badge } from '../components/ui/Badge';
 import { Countdown } from '../components/ui/Countdown';
+import { BetModal } from '../components/BetModal';
 import { formatAmount, getGameModeName } from '../lib/utils';
 import { cn } from '../lib/utils';
+import { Pool, Option } from '../lib/types';
 
 export function HomePage() {
-  const navigate = useNavigate();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalData, setModalData] = useState<{ event: Event, pool: Pool, option: Option } | null>(null);
 
   useEffect(() => {
     loadEvents();
@@ -31,6 +35,18 @@ export function HomePage() {
     }
   };
 
+  const handleOpenBetModal = (event: Event, pool: Pool, option: Option) => {
+    setModalData({ event, pool, option });
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmBet = async (amount: number) => {
+    console.log('Placing bet:', amount, modalData);
+    // TODO: Implement actual betting logic with useLuffa
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    alert(`下注成功: ${amount} USD on ${modalData?.option.name}`);
+  };
+
   if (loading) return <LoadingPage />;
 
   // Find the primary event to showcase (Live or most recent Betting)
@@ -42,6 +58,16 @@ export function HomePage() {
 
   return (
     <div className="space-y-6 pb-20">
+      {modalData && (
+        <BetModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          event={modalData.event}
+          pool={modalData.pool}
+          option={modalData.option}
+          onConfirm={handleConfirmBet}
+        />
+      )}
       {/* Mobile-First Dashboard Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 py-8">
         <div className="space-y-2">
@@ -90,7 +116,7 @@ export function HomePage() {
           <PlayStyleCard
             key={pool.id}
             pool={pool}
-            onClick={() => navigate(`/events/${liveEvent.id}`)}
+            onSelectOption={(option) => handleOpenBetModal(liveEvent, pool, option)}
           />
         ))}
       </div>
@@ -114,7 +140,7 @@ export function HomePage() {
   );
 }
 
-function PlayStyleCard({ pool, onClick }: { pool: any, onClick: () => void }) {
+function PlayStyleCard({ pool, onSelectOption }: { pool: any, onSelectOption: (option: any) => void }) {
   const isDataSniper = pool.gameMode === GameModeType.DATA_SNIPER;
   const isVolatility = pool.gameMode === GameModeType.VOLATILITY_HUNTER;
   const isJackpot = pool.gameMode === GameModeType.JACKPOT;
@@ -134,9 +160,8 @@ function PlayStyleCard({ pool, onClick }: { pool: any, onClick: () => void }) {
   return (
     <motion.div
       whileHover={{ y: -5 }}
-      onClick={onClick}
       className={cn(
-        "card-premium p-6 cursor-pointer group flex flex-col h-full",
+        "card-premium p-6 group flex flex-col h-full",
         getStyle()
       )}
     >
@@ -153,9 +178,11 @@ function PlayStyleCard({ pool, onClick }: { pool: any, onClick: () => void }) {
 
       <div className="space-y-3 flex-1">
         {pool.options.map((opt: any) => (
-          <div
+          <motion.div
             key={opt.id}
-            className="p-4 rounded-xl bg-white/5 border border-white/5 group-hover:border-white/10 transition-colors flex items-center justify-between"
+            whileTap={{ scale: 0.98 }}
+            onClick={() => onSelectOption(opt)}
+            className="p-4 rounded-xl bg-white/5 border border-white/5 hover:border-white/20 hover:bg-white/[0.08] cursor-pointer transition-all flex items-center justify-between"
           >
             <div className="flex flex-col">
               <span className="text-sm font-black text-white uppercase tracking-wider">{opt.name}</span>
@@ -168,10 +195,10 @@ function PlayStyleCard({ pool, onClick }: { pool: any, onClick: () => void }) {
                     opt.name.includes('96k') ? '10x' : '5x'}
               </span>
             )}
-            {isDataSniper && (
-              <span className="text-gray-600">📈</span>
+            {!isJackpot && (
+              <span className="text-gray-600 transition-transform group-hover:translate-x-1">→</span>
             )}
-          </div>
+          </motion.div>
         ))}
       </div>
 
