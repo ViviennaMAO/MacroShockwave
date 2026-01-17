@@ -1,0 +1,211 @@
+// Prisma Schema for MacroShockwave
+// 数据库设计文档
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// 用户模型
+// ============================================
+
+model User {
+  id        String   @id @default(cuid())
+  address   String   @unique // 钱包地址
+  username  String?  // Luffa 用户名
+  avatar    String?  // 头像 URL
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 关联
+  orders Order[]
+  stats  UserStats?
+
+  @@index([address])
+  @@map("users")
+}
+
+model UserStats {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  totalBets     Int      @default(0) // 总下注次数
+  totalWins     Int      @default(0) // 总胜利次数
+  totalLosses   Int      @default(0) // 总失败次数
+  totalAmount   Decimal  @default(0) @db.Decimal(20, 2) // 总下注金额
+  totalWinnings Decimal  @default(0) @db.Decimal(20, 2) // 总收益金额
+  winRate       Decimal  @default(0) @db.Decimal(5, 2)  // 胜率
+
+  updatedAt     DateTime @updatedAt
+
+  @@map("user_stats")
+}
+
+// ============================================
+// 事件模型
+// ============================================
+
+model Event {
+  id             String      @id @default(cuid())
+  name           String      // 事件名称，如 "CPI 2026-02-14"
+  type           EventType   // 事件类型
+  releaseTime    DateTime    // 数据发布时间
+  consensusValue Decimal?    @db.Decimal(10, 2) // 预期值
+  publishedValue Decimal?    @db.Decimal(10, 2) // 公布值
+  tolerance      Decimal?    @db.Decimal(10, 2) // 容差
+  status         EventStatus @default(OPEN)
+  settledAt      DateTime?   // 结算时间
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  // 关联
+  pools  Pool[]
+  orders Order[]
+
+  @@index([releaseTime])
+  @@index([status])
+  @@index([type])
+  @@map("events")
+}
+
+enum EventType {
+  CPI       // 消费者物价指数
+  NFP       // 非农就业数据
+  GDP       // 国内生产总值
+  FED_RATE  // 美联储利率决议
+}
+
+enum EventStatus {
+  OPEN      // 待开放
+  BETTING   // 下注中
+  LOCKED    // 已锁定
+  SETTLING  // 结算中
+  SETTLED   // 已结算
+}
+
+// ============================================
+// 奖金池模型
+// ============================================
+
+model Pool {
+  id          String   @id @default(cuid())
+  eventId     String
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  gameMode    GameMode // 玩法类型
+  totalAmount Decimal  @default(0) @db.Decimal(20, 2) // 总下注额
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // 关联
+  options Option[]
+
+  @@unique([eventId, gameMode])
+  @@index([eventId])
+  @@map("pools")
+}
+
+enum GameMode {
+  DATA_SNIPER       // 数据狙击手
+  VOLATILITY_HUNTER // 波动猎人
+  JACKPOT           // 精准点位
+}
+
+// ============================================
+// 选项模型
+// ============================================
+
+model Option {
+  id          String   @id @default(cuid())
+  poolId      String
+  pool        Pool     @relation(fields: [poolId], references: [id], onDelete: Cascade)
+  name        String   // 选项名称，如 "鸽派"、"风平浪静"
+  type        String   // 选项类型，如 DOVISH, NEUTRAL, HAWKISH
+  totalAmount Decimal  @default(0) @db.Decimal(20, 2) // 该选项总下注额
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // 关联
+  orders Order[]
+
+  @@index([poolId])
+  @@map("options")
+}
+
+// ============================================
+// 订单模型
+// ============================================
+
+model Order {
+  id          String      @id @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  eventId     String
+  event       Event       @relation(fields: [eventId], references: [id])
+  optionId    String
+  option      Option      @relation(fields: [optionId], references: [id])
+  gameMode    GameMode    // 玩法类型
+  amount      Decimal     @db.Decimal(20, 2) // 下注金额
+  winnings    Decimal     @default(0) @db.Decimal(20, 2) // 奖金
+  status      OrderStatus @default(PENDING)
+  txHash      String?     // 交易哈希
+  confirmedAt DateTime?   // 确认时间
+  settledAt   DateTime?   // 结算时间
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([eventId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING   // 待确认
+  CONFIRMED // 已确认
+  WON       // 已获胜
+  LOST      // 已失败
+  REFUNDED  // 已退款
+}
+
+// ============================================
+// Oracle 数据模型
+// ============================================
+
+model OracleData {
+  id         String   @id @default(cuid())
+  eventId    String   // 关联的事件ID
+  dataType   String   // 数据类型：MACRO_DATA, BTC_PRICE
+  value      Decimal  @db.Decimal(20, 8) // 数据值
+  source     String   // 数据来源
+  timestamp  DateTime // 数据时间戳
+  isVerified Boolean  @default(false) // 是否已验证
+  createdAt  DateTime @default(now())
+
+  @@index([eventId])
+  @@index([timestamp])
+  @@map("oracle_data")
+}
+
+// ============================================
+// 价格历史模型（用于波动计算）
+// ============================================
+
+model PriceHistory {
+  id        String   @id @default(cuid())
+  eventId   String   // 关联的事件ID
+  price     Decimal  @db.Decimal(20, 8) // BTC 价格
+  source    String   // 数据源：BINANCE, COINBASE, KRAKEN
+  timestamp DateTime // 价格时间戳
+  createdAt DateTime @default(now())
+
+  @@index([eventId])
+  @@index([timestamp])
+  @@map("price_history")
+}
