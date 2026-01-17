@@ -45,14 +45,29 @@ api.interceptors.response.use(
               type: 'CPI',
               releaseTime: new Date(Date.now() + 86400000).toISOString(),
               consensusValue: 3.1,
+              basePrice: 95420.5,
               status: 'BETTING',
               canBet: true,
               pools: [
                 {
-                  gameMode: 'DATA_SNIPER', totalAmount: 12500, options: [
-                    { id: '1', name: 'DOVISH', totalAmount: 4000 },
-                    { id: '2', name: 'NEUTRAL', totalAmount: 4500 },
-                    { id: '3', name: 'HAWKISH', totalAmount: 4000 }
+                  id: 'p1', eventId: 'cpi-demo', gameMode: 'DATA_SNIPER', totalAmount: 12500, options: [
+                    { id: '1', poolId: 'p1', name: 'DOVISH', totalAmount: 4000 },
+                    { id: '2', poolId: 'p1', name: 'NEUTRAL', totalAmount: 4500 },
+                    { id: '3', poolId: 'p1', name: 'HAWKISH', totalAmount: 4000 }
+                  ]
+                },
+                {
+                  id: 'p2', eventId: 'cpi-demo', gameMode: 'VOLATILITY_HUNTER', totalAmount: 8400, options: [
+                    { id: '4', poolId: 'p2', name: 'CALM', totalAmount: 3000 },
+                    { id: '5', poolId: 'p2', name: 'TSUNAMI', totalAmount: 5400 }
+                  ]
+                },
+                {
+                  id: 'p3', eventId: 'cpi-demo', gameMode: 'JACKPOT', totalAmount: 25000, options: [
+                    { id: '6', poolId: 'p3', name: 'BTC > $98,000', totalAmount: 5000 },
+                    { id: '7', poolId: 'p3', name: 'BTC $97k-$98k', totalAmount: 8000 },
+                    { id: '8', poolId: 'p3', name: 'BTC $96k-$97k', totalAmount: 7000 },
+                    { id: '9', poolId: 'p3', name: 'BTC $95k-$96k', totalAmount: 5000 }
                   ]
                 }
               ]

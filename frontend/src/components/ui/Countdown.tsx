@@ -4,9 +4,10 @@ import { getCountdown } from '../../lib/utils';
 interface CountdownProps {
   targetDate: Date | string;
   onExpire?: () => void;
+  variant?: 'default' | 'digital';
 }
 
-export function Countdown({ targetDate, onExpire }: CountdownProps) {
+export function Countdown({ targetDate, onExpire, variant = 'default' }: CountdownProps) {
   const [countdown, setCountdown] = useState(() => getCountdown(targetDate));
 
   useEffect(() => {
@@ -24,7 +25,16 @@ export function Countdown({ targetDate, onExpire }: CountdownProps) {
   }, [targetDate, onExpire]);
 
   if (countdown.isExpired) {
-    return <span className="text-gray-400">已结束</span>;
+    return <span className="opacity-50">CLOSED</span>;
+  }
+
+  if (variant === 'digital') {
+    const totalMinutes = countdown.days * 24 * 60 + countdown.hours * 60 + countdown.minutes;
+    return (
+      <span className="font-mono">
+        {totalMinutes.toString().padStart(2, '0')}:{countdown.seconds.toString().padStart(2, '0')}
+      </span>
+    );
   }
 
   return (
@@ -32,22 +42,22 @@ export function Countdown({ targetDate, onExpire }: CountdownProps) {
       {countdown.days > 0 && (
         <div className="flex flex-col items-center">
           <span className="text-2xl font-bold text-white">{countdown.days}</span>
-          <span className="text-xs text-gray-400">天</span>
+          <span className="text-xs text-gray-500">D</span>
         </div>
       )}
       <div className="flex flex-col items-center">
         <span className="text-2xl font-bold text-white">{countdown.hours.toString().padStart(2, '0')}</span>
-        <span className="text-xs text-gray-400">时</span>
+        <span className="text-xs text-gray-500">H</span>
       </div>
-      <span className="text-2xl font-bold text-white">:</span>
+      <span className="text-2xl font-bold text-white opacity-30">:</span>
       <div className="flex flex-col items-center">
         <span className="text-2xl font-bold text-white">{countdown.minutes.toString().padStart(2, '0')}</span>
-        <span className="text-xs text-gray-400">分</span>
+        <span className="text-xs text-gray-500">M</span>
       </div>
-      <span className="text-2xl font-bold text-white">:</span>
+      <span className="text-2xl font-bold text-white opacity-30">:</span>
       <div className="flex flex-col items-center">
         <span className="text-2xl font-bold text-white">{countdown.seconds.toString().padStart(2, '0')}</span>
-        <span className="text-xs text-gray-400">秒</span>
+        <span className="text-xs text-gray-500">S</span>
       </div>
     </div>
   );

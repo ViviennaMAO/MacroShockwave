@@ -41,6 +41,7 @@ export interface Event {
   publishedValue?: number;
   tolerance?: number;
   status: EventStatus;
+  basePrice?: number;
   settledAt?: string;
   createdAt: string;
   updatedAt: string;
