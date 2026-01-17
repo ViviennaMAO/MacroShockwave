@@ -81,9 +81,9 @@ export function HomePage() {
         </div>
 
         {/* Digital Clock Styled Countdown */}
-        <div className="bg-danger/10 border border-danger/20 rounded-2xl px-6 py-4 flex items-center gap-6 self-start md:self-auto shadow-lg shadow-danger/5">
-          <span className="text-danger text-3xl">⏰</span>
-          <div className="font-mono text-4xl md:text-5xl font-black text-danger tracking-tighter drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+        <div className="bg-danger/10 border border-danger/20 rounded-xl px-4 py-2 flex items-center gap-4 self-start md:self-auto shadow-lg shadow-danger/5">
+          <span className="text-danger text-xl">⏰</span>
+          <div className="font-mono text-2xl md:text-3xl font-black text-danger tracking-tighter drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]">
             <Countdown
               targetDate={new Date(new Date(liveEvent.releaseTime).getTime() - 5 * 60 * 1000)}
               variant="digital"
