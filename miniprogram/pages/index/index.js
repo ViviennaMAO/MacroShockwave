@@ -1,8 +1,7 @@
 Page({
     data: {
-        // 这里的 URL 应该是你部署后的前端地址
-        // 开发时可以设置为 http://localhost:5173 (Vite 默认端口)
-        url: 'http://localhost:5173'
+        // 使用用户提供的正式 Vercel 部署地址
+        url: 'https://macro-shockwave.vercel.app/'
     },
 
     onLoad(options) {

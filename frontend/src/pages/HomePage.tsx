@@ -55,21 +55,28 @@ export function HomePage() {
   return (
     <div className="space-y-8">
       {/* Hero Section */}
-      <div className="text-center space-y-4 py-12">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-5xl font-bold"
+      <div className="text-center space-y-6 py-20">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="inline-block px-4 py-1.5 rounded-full bg-success/10 border border-success/20 text-success text-xs font-bold tracking-widest uppercase mb-4"
         >
-          <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-            宏观冲击波
+          ● LIVE
+        </motion.div>
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-7xl font-black tracking-tighter"
+        >
+          <span className="bg-gradient-to-b from-white to-gray-400 bg-clip-text text-transparent">
+            CPI SHOCKWAVE
           </span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-xl text-gray-400 max-w-2xl mx-auto"
+          className="text-xl text-gray-500 max-w-2xl mx-auto font-medium"
         >
           基于宏观经济数据的比特币价格预测市场
         </motion.p>

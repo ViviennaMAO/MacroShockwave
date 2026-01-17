@@ -30,14 +30,43 @@ api.interceptors.response.use(
     return response.data;
   },
   (error) => {
+    // 模拟数据回退 - 方便在没有后端开发时调试 UI
+    if (error.code === 'ERR_NETWORK' || error.message.includes('网络错误')) {
+      const url = error.config.url;
+      console.warn(`[Mock API] Backend unreachable at ${url}, using mock data.`);
+
+      if (url.includes('/events')) {
+        return {
+          success: true,
+          data: [
+            {
+              id: 'cpi-demo',
+              name: 'CPI SHOCKWAVE',
+              type: 'CPI',
+              releaseTime: new Date(Date.now() + 86400000).toISOString(),
+              consensusValue: 3.1,
+              status: 'BETTING',
+              canBet: true,
+              pools: [
+                {
+                  gameMode: 'DATA_SNIPER', totalAmount: 12500, options: [
+                    { id: '1', name: 'DOVISH', totalAmount: 4000 },
+                    { id: '2', name: 'NEUTRAL', totalAmount: 4500 },
+                    { id: '3', name: 'HAWKISH', totalAmount: 4000 }
+                  ]
+                }
+              ]
+            }
+          ]
+        };
+      }
+    }
+
     if (error.response) {
-      // 服务器返回错误
       throw new Error(error.response.data.error || '请求失败');
     } else if (error.request) {
-      // 请求已发出但没有收到响应
-      throw new Error('网络错误，请检查连接');
+      throw new Error('网络错误，请检查链接');
     } else {
-      // 其他错误
       throw new Error(error.message);
     }
   }
