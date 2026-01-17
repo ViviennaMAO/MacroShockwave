@@ -4,8 +4,7 @@ import { PrismaClient } from '@prisma/client';
 @Injectable()
 export class PrismaService
   extends PrismaClient
-  implements OnModuleInit, OnModuleDestroy
-{
+  implements OnModuleInit, OnModuleDestroy {
   async onModuleInit() {
     await this.$connect();
     console.log('✅ Prisma connected to database');
@@ -22,12 +21,12 @@ export class PrismaService
       throw new Error('Cannot clean database in production!');
     }
 
-    const models = Reflect.ownKeys(this).filter(
-      (key) => key[0] !== '_' && key !== 'cleanDatabase'
+    const models = Object.keys(this).filter(
+      (key) => !key.startsWith('_') && key !== 'cleanDatabase'
     );
 
     return Promise.all(
-      models.map((modelKey) => this[modelKey].deleteMany())
+      models.map((modelKey) => (this as any)[modelKey].deleteMany())
     );
   }
 }

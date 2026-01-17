@@ -8,7 +8,7 @@ export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly redis: RedisService,
-  ) {}
+  ) { }
 
   /**
    * 获取或创建用户
@@ -61,13 +61,13 @@ export class UsersService {
       createdAt: user.createdAt,
       stats: user.stats
         ? {
-            totalBets: user.stats.totalBets,
-            totalWins: user.stats.totalWins,
-            totalLosses: user.stats.totalLosses,
-            totalAmount: Number(user.stats.totalAmount),
-            totalWinnings: Number(user.stats.totalWinnings),
-            winRate: Number(user.stats.winRate),
-          }
+          totalBets: user.stats.totalBets,
+          totalWins: user.stats.totalWins,
+          totalLosses: user.stats.totalLosses,
+          totalAmount: Number(user.stats.totalAmount),
+          totalWinnings: Number(user.stats.totalWinnings),
+          winRate: Number(user.stats.winRate),
+        }
         : null,
     };
   }
@@ -178,8 +178,8 @@ export class UsersService {
       roi:
         Number(user.stats?.totalAmount || 0) > 0
           ? Number(
-              ((profit / Number(user.stats.totalAmount)) * 100).toFixed(2),
-            )
+            ((profit / Number(user.stats.totalAmount)) * 100).toFixed(2),
+          )
           : 0,
       recentOrders: recentOrders.map((order) => ({
         id: order.id,
@@ -193,7 +193,7 @@ export class UsersService {
     };
 
     // 缓存10秒
-    await this.redis.set(cacheKey, JSON.stringify(stats), 10);
+    await this.redis.set(cacheKey, JSON.stringify(stats), 'EX', 10);
 
     return stats;
   }
@@ -275,7 +275,7 @@ export class UsersService {
     };
 
     // 缓存10秒
-    await this.redis.set(cacheKey, JSON.stringify(portfolio), 10);
+    await this.redis.set(cacheKey, JSON.stringify(portfolio), 'EX', 10);
 
     return portfolio;
   }
@@ -360,7 +360,7 @@ export class UsersService {
     }));
 
     // 缓存30秒
-    await this.redis.set(cacheKey, JSON.stringify(leaderboard), 30);
+    await this.redis.set(cacheKey, JSON.stringify(leaderboard), 'EX', 30);
 
     return leaderboard;
   }
